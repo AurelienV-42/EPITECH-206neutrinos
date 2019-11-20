@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import math
+
+def helpFlag():
+    if len(sys.argv) == 2 and sys.argv[1] == "-h":
+        print("USAGE")
+        print("\t./206neutrinos n a h sd")
+        print("\nDESCRIPTION")
+        print("\tn\tnumber of values")
+        print("\ta\tarithmetic mean")
+        print("\th\tharmonic mean")
+        print("\tsd\tstandard deviation")
+        sys.exit(0)
+
+def parse_args():
+    try:
+        parser = argparse.ArgumentParser(description='205IQ', usage=helpFlag())
+        parser.add_argument("n", type=int)
+        parser.add_argument("a", type=int)
+        parser.add_argument("h", type=int)
+        parser.add_argument("sd", type=int)
+        args = parser.parse_args()
+        return args
+    except:
+        sys.exit(84)
+
+def main():
+    args = parse_args()
+    number_of_values = args.n
+    arithmetic_mean = args.a
+    harmonic_mean = args.h
+    standard_deviation = args.sd
+    if (number_of_values < 0 or arithmetic_mean < 0 or harmonic_mean <= 0 or standard_deviation < 0):
+        sys.exit(84)
+    value = 0
+    while True:
+        print("Enter next value: ", end='')
+        value = input()
+        if value == "END":
+            break
+        if float(value) < 0:
+            sys.exit(84)
+        total = arithmetic_mean * number_of_values
+        temp = (standard_deviation ** 2 + arithmetic_mean ** 2) * number_of_values
+        number_of_values += 1
+        try:
+            arithmetic_mean = (total + float(value)) / number_of_values
+            standard_deviation = math.sqrt(((temp + float(value) ** 2) / number_of_values) - pow(arithmetic_mean, 2))
+            root_mean = math.sqrt((temp + pow(float(value), 2)) / number_of_values)
+            harmonic_mean = number_of_values / ((1 / float(value)) + ((number_of_values - 1) / harmonic_mean))
+        except:
+            return 84
+        print("    Number of value:    ", number_of_values, sep='')
+        print("    Standard deviation: ", "%.2f" % standard_deviation, sep='')
+        print("    Arithmetic mean:    ", "%.2f" % arithmetic_mean, sep='')
+        print("    Root mean square:   ", "%.2f" % root_mean, sep='')
+        print("    Harmonic mean:      ", "%.2f" % harmonic_mean, "\n", sep='')
+
+main()
